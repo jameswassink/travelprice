@@ -1,0 +1,21 @@
+{
+  "name": "travelprice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@google/maps": "^0.5.5",
+    "axios": "^0.18.0",
+    "q": "^1.5.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.10.0",
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha \"test/**/test-*.js\" && eslint test"
+  },
+  "author": "",
+  "license": "ISC"
+}
