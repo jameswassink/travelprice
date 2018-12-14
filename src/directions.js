@@ -3,21 +3,33 @@ const googleMapsClient = require('@google/maps').createClient({
     Promise: require('q').Promise
 });
 
-module.exports = async function (origin, destination) {
-    const response = await googleMapsClient.directions({
-        // origin: '10 Gwinganna Avenue, Kiama NSW 2533, Australia',
-        // destination: '51 Emu Rd, Glenbrook NSW',
-        // origin: '-33.9642466,150.875037',
-        // destination: '-33.7930349,150.8363779'
+module.exports = async function (origin, destination, noTolls) {
+    const opts = {
         origin: origin,
-        destination: destination
-    }).asPromise();
-
-    const firstRoute = response.json.routes[0];
-    const duration = firstRoute.legs[0].duration.value;
-
-    return {
-        duration: firstRoute.legs[0].duration.value,
-        polyline: firstRoute.overview_polyline.points
+        destination: destination,
+        region: 'au'
+    };
+    if (noTolls){
+        opts.avoid = "tolls";
     }
+    try {
+        const response = await googleMapsClient.directions(opts).asPromise();
+
+        if (response.json.routes.length == 0){
+            return {error: true, message: response.json.status};
+        }
+
+        const firstRoute = response.json.routes[0];
+    
+        return {
+            duration: firstRoute.legs[0].duration.value,
+            polyline: firstRoute.overview_polyline.points
+        }
+    } catch (error){
+        return {
+            error: true,
+            message: error.json.status
+        }
+    }
+    
 };
